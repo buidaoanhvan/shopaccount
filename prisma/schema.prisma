@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  name       String
+  avatar_url String?
+  is_active  Boolean  @default(true)
+  role       String   @default("user")
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model UserProvider {
+  id               String   @id @default(uuid())
+  user_id          String
+  provider         String
+  provider_user_id String
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now())
+
+  @@unique([provider, provider_user_id])
+  @@index([user_id])
+}
+
+model UserProviderKey {
+  id         String   @id @default(uuid())
+  user_id    String
+  expires_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model UserSession {
+  id          String   @id @default(uuid())
+  user_id     String
+  expires_at  DateTime
+  device_info String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+
+  @@index([user_id])
+}
