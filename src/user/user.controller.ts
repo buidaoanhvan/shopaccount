@@ -22,7 +22,7 @@ export class UserController {
   //api profile
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(['admin', 'user'])
-  @Post()
+  @Post('profile')
   @ApiBearerAuth()
   async profile(@Req() req: Request) {
     const { email } = req.user as GetUserProfileDto;

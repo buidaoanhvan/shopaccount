@@ -33,15 +33,18 @@ export class AuthController {
       req.user as LoginUserDto,
     );
     //chuyển hướng về client
-    res.redirect('/auth/provider/?key=' + key);
+    //res.redirect('/auth/provider/?key=' + key);
+    res.redirect('http://localhost:3000/?key=' + key);
   }
 
   //login key
   @Get('provider')
   @ApiOperation({ summary: 'Retrun key login' })
   async provider(@Req() req: Request) {
+    const key = req.query.key;
+    //chuyển hướng về client
     return {
-      key: req.query.key,
+      key,
     };
   }
 
