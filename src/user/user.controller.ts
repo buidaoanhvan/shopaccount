@@ -1,4 +1,10 @@
-import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { GetUserProfileDto } from './dto/get-profile.dto';
@@ -7,6 +13,7 @@ import { AppException } from 'src/common/app.exception';
 import { ErrorCode, ErrorMessage } from 'src/common/error.list';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -17,8 +24,9 @@ export class UserController {
   @Roles(['admin', 'user'])
   @Post()
   @ApiBearerAuth()
-  async profile(@Body() data: GetUserProfileDto) {
-    const user = await this.userService.getUserById(data.user_id);
+  async profile(@Req() req: Request) {
+    const { email } = req.user as GetUserProfileDto;
+    const user = await this.userService.getUserByEmail(email);
     if (!user) {
       throw new AppException(
         ErrorCode.USER01,

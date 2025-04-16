@@ -38,6 +38,7 @@ export class AuthController {
 
   //login key
   @Get('provider')
+  @ApiOperation({ summary: 'Retrun key login' })
   async provider(@Req() req: Request) {
     return {
       key: req.query.key,
@@ -45,6 +46,7 @@ export class AuthController {
   }
 
   //login provider vs key
+  @ApiOperation({ summary: 'Login with key' })
   @Post('provider/login')
   async providerLogin(@Body() loginKeyDto: LoginKeyDto) {
     const token = await this.authService.providerLogin(loginKeyDto);

@@ -21,8 +21,6 @@ export class JwtService extends PassportStrategy(Strategy, 'jwt') {
     if (session.expires_at < new Date()) {
       throw new UnauthorizedException('Session expired');
     }
-    console.log(payload);
-
     return payload;
   }
 }
