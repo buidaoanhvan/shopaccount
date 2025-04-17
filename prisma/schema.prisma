@@ -55,3 +55,25 @@ model UserSession {
 
   @@index([user_id])
 }
+
+model ServiceAccount  {
+  id                  String   @id @default(uuid())
+  category_id         String
+  provider            String
+  service_image       String?
+  service_name        String
+  service_description String
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now())
+}
+
+model ServicePricing {
+  id                  String   @id @default(uuid())
+  service_id          String
+  option_name         String
+  price               Float
+  duration            Int
+  status              String   @default("show")
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now())
+}
