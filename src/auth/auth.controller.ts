@@ -11,8 +11,11 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { LoginUserDto } from './dto/login-user.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { LoginKeyDto } from './dto/login-key.dto';
+import { JwtGuard } from './guard/jwt.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
 @Controller('auth')
 export class AuthController {

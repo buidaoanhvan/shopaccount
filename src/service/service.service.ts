@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateServiceDto } from './dto/create-service.dto';
 
 @Injectable()
 export class ServiceService {
   constructor(private prisma: PrismaService) {}
 
-  async createService(data: any) {
+  async createService(data: CreateServiceDto) {
     const serviceAccount = await this.prisma.serviceAccount.create({
       data: {
-        service_name: data.service_name as string,
-        service_description: data.service_description as string,
-        category_id: data.category_id as string,
-        provider: data.provider as string,
+        service_name: data.service_name,
+        service_description: data.service_description,
+        category_id: data.category_id,
+        provider: data.provider,
       },
     });
-    data.items.map(async (item) => {
-      await this.prisma.servicePricing.create({
-        data: {
-          service_id: serviceAccount.id,
-          option_name: item.name,
-          price: parseInt(item.price),
-          duration: parseInt(item.day),
-        },
-      });
+
+    await this.prisma.servicePricing.createMany({
+      data: data.items.map((item) => ({
+        service_id: serviceAccount.id,
+        option_name: item.name,
+        price: parseInt(item.price),
+        duration: parseInt(item.day),
+      })),
     });
     return serviceAccount;
   }
